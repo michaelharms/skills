@@ -39,7 +39,7 @@ export default async function Page({ params }: PageProps<"/tasks/[taskId]">) {
 
 ## `components/`
 
-- `primitives/`: building blocks only (shadcn/ui components, if the project uses it, or its own). They may import only other primitives and `lib/`. With shadcn/ui, prefer wrapping a primitive over editing the generated file, so regenerating it stays safe; `components.json` points shadcn's `ui` alias at `@/components/primitives`.
+- `primitives/`: building blocks only (shadcn/ui components, if the project uses it, or its own). They may import only other primitives and `lib/`. With shadcn/ui, prefer wrapping a primitive over editing the generated file, so regenerating it stays safe; `components.json` points shadcn's `ui` alias at `@/components/primitives`. A project that doesn't use shadcn/ui yet can add it when a change first needs one of its primitives: ask the user, then follow "Adding shadcn/ui" in `setup.md`.
 - `patterns/`: reusable composites that know nothing about any domain. If a component mentions a domain concept (a task, a user), it belongs in that module.
 - `shells/`: page chrome and navigation.
 

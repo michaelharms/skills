@@ -63,7 +63,7 @@ The agent follows the setup workflow in [`references/setup.md`](references/setup
 
 1. **Asks you** which optional pieces the project uses (see below), in one round of questions with a default for each.
 2. **Scaffolds** the app with `create-next-app` if there isn't one (TypeScript, App Router, `src/`, the `@/*` alias).
-3. **Installs the lint tooling** (`eslint-plugin-boundaries`, `eslint-import-resolver-typescript`), copies the boundaries config and wires it into `eslint.config.mjs`, and turns on `typedRoutes`. If you chose Storybook or shadcn/ui, it runs their init commands.
+3. **Installs the lint tooling** (`eslint-plugin-boundaries`, `eslint-import-resolver-typescript`), copies the boundaries config and wires it into `eslint.config.mjs`, and turns on `typedRoutes`. If you chose Storybook, it runs its init command.
 4. **Points the project's agents at the skill**: a section in `AGENTS.md` (or `CLAUDE.md`) with your choices, `docs/adr/0001-follow-nextjs-fullstack-architecture.md`, and `CODING_STANDARDS.md` for review tools.
 5. **Verifies** that lint, the type check and `next build` pass with the boundary rules at error level.
 6. **Reports** what it set up and what's left for you.
@@ -72,7 +72,7 @@ What's left for you comes later, when the code first needs it: creating the Post
 
 ### What setup doesn't do
 
-Setup writes no infrastructure code. The error classes, the logger, the request context, the Drizzle client and the tRPC or server-action plumbing are built by the first feature that needs them, together with their dependencies and environment variables. Ask for a feature ("users can create tasks") right after setup, and the agent builds the shared pieces that feature uses first.
+Setup writes no infrastructure code. The error classes, the logger, the request context, the Drizzle client and the tRPC or server-action plumbing are built by the first feature that needs them, together with their dependencies and environment variables. Ask for a feature ("users can create tasks") right after setup, and the agent builds the shared pieces that feature uses first. shadcn/ui works the same way: even if you choose it at setup, it's initialized by the first change that needs one of its primitives.
 
 This keeps the project free of empty placeholders and unused dependencies, and every piece is written for the choices the project actually made: without analytics there's no event buffer, without tracing no spans.
 
@@ -87,9 +87,9 @@ This keeps the project free of empty placeholders and unused dependencies, and e
 | Analytics provider (PostHog, Segment, …) | Events should reach an analytics tool, not only the logs |
 | Logging library (pino, …) | JSON lines on stdout (enough on Vercel) aren't enough |
 | Storybook | Components' visual states should be built and reviewed in isolation |
-| shadcn/ui | You want its primitives |
+| shadcn/ui | You want its primitives instead of (or next to) your own |
 
-Most projects use at least one of tRPC and server actions; both is fine too. Adding a piece later is a decision: tell the agent, and it updates the "Setup" list and writes an ADR when the piece brings a vendor or a second transport.
+Most projects use at least one of tRPC and server actions; both is fine too. Every piece can also be added later, when the project first needs it. That's a decision: the agent asks you, updates the "Setup" list, and writes an ADR when the piece brings a vendor or a second transport. For example, a project that started with its own primitives can add shadcn/ui the day it wants a date picker; the agent initializes it, points its folders into `components/primitives/` and leaves the existing primitives alone.
 
 ### By hand
 

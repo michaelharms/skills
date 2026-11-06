@@ -80,7 +80,7 @@ Open the references for the task at hand, not all of them. Longer references sta
 | Interviewing about a feature, or writing or reviewing a spec or PRD, ticket, user story, implementation plan or ADR, with any tool or by hand | `references/planning.md` |
 | Explaining or questioning why the architecture is this way | `references/decisions.md` |
 | Setting this up in a new project or adopting it in an existing one | "Setup workflow" in `references/setup.md` |
-| Adding an optional piece (tRPC, server actions, tracing, analytics, Storybook), or needing a shared piece (errors, logger, context, Drizzle client, transport) that doesn't exist yet | "Building shared pieces on first use" in `references/setup.md` |
+| Adding an optional piece (tRPC, server actions, tracing, analytics, Storybook, shadcn/ui), or needing a shared piece (errors, logger, context, Drizzle client, transport) that doesn't exist yet | "Building shared pieces on first use" in `references/setup.md` |
 
 A complete feature (for example "users can archive tasks") usually touches, in this order: domain → contracts and errors → use-cases and persistence → delivery → UI. Read the references as you reach each layer rather than all at once.
 

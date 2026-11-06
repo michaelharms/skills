@@ -9,6 +9,7 @@ Read this when setting up these conventions in a new project or adopting them in
 - Configuration
 - Point the project's AGENTS.md here
 - Building shared pieces on first use
+  - Adding shadcn/ui
 - Dependencies
 - Environment variables
 - Adopting in an existing project
@@ -22,7 +23,7 @@ When asked to set up this architecture, follow these steps in order.
 1. **Detect the starting point.** An empty folder: continue with every step. A fresh Next app (only the files `create-next-app` generates): skip step 3. An existing app with code of its own: follow "Adopting in an existing project" instead; setup there moves, rewrites or deletes no existing code.
 2. **Ask the user** about each optional piece in "Choose what the project needs", in one round of questions with its default, unless the request already answered it. Don't guess. If you can't ask, use the defaults, record the transport as undecided (it has no default), and list these as assumptions in the report.
 3. **Scaffold**, if there's no app: `npx create-next-app@latest . --ts --eslint --app --src-dir --import-alias "@/*" --yes`. Check `node --version` first against the minimum in Next's docs (Node 20.9 for Next 16); with an older Node the scaffold fails. Run every init command non-interactively.
-4. **Install only what the configuration needs now:** `npm i -D eslint-plugin-boundaries eslint-import-resolver-typescript`. Runtime libraries (Zod, Drizzle, tRPC, `next-safe-action`, OpenTelemetry, analytics SDKs, pino) are installed by the change that first imports them (see "Dependencies"). Storybook and shadcn/ui are the exception, because their init commands are setup: run them now if chosen.
+4. **Install only what the configuration needs now:** `npm i -D eslint-plugin-boundaries eslint-import-resolver-typescript`. Runtime libraries (Zod, Drizzle, tRPC, `next-safe-action`, OpenTelemetry, analytics SDKs, pino) are installed by the change that first imports them (see "Dependencies"). Storybook is the exception, because its init command is setup: run it now if chosen. shadcn/ui, even if chosen, is set up with the first primitive taken from it (see "Adding shadcn/ui").
 5. **Configure** the project as in "Configuration".
 6. **Point the project's agents here**, as in "Point the project's AGENTS.md here", with the "Setup" list filled in from the answers.
 7. **Verify**: `npx eslint .`, `npx next typegen && npx tsc --noEmit` (the route types `tsc` needs come from `typegen`) and `npx next build` all pass. In a new project the boundary rules are at `"error"`; in an existing one, lint passes with warnings only (see "Adopting in an existing project").
@@ -40,9 +41,9 @@ When asked to set up this architecture, follow these steps in order.
 | **Analytics provider** (PostHog, Segment, …) | Events should leave the logs and reach an analytics tool | None | Events go only to the logs |
 | **Logging library** (pino, …) | The console sink's JSON lines on stdout aren't enough | Console sink | The console sink, with no dependency |
 | **Storybook** | Components' visual states should be built and reviewed in isolation | No | No stories; `stories.md` doesn't apply |
-| **shadcn/ui** | You want its primitives | No | `components/primitives/` holds your own building blocks |
+| **shadcn/ui** | You want its primitives. It can be added at any time, with the first primitive taken from it | No | `components/primitives/` holds your own building blocks |
 
-Most projects need at least one of tRPC and server actions; `delivery.md` ("Choosing the transport") helps decide, so ask what the app does rather than which library the user prefers. A transport left undecided at setup is decided before the first procedure or action: ask then, and record the answer. Record the choices in the "Setup" list of the project's `AGENTS.md` (see `assets/agents-md-snippet.md`), so agents know what the project uses and don't add the rest on their own. Adding a piece later is a decision too: update the list, and write an ADR when it brings a vendor or a second transport (see "ADRs" in `planning.md`).
+Most projects need at least one of tRPC and server actions; `delivery.md` ("Choosing the transport") helps decide, so ask what the app does rather than which library the user prefers. A transport left undecided at setup is decided before the first procedure or action: ask then, and record the answer. Record the choices in the "Setup" list of the project's `AGENTS.md` (see `assets/agents-md-snippet.md`), so agents know what the project uses and don't add the rest on their own. Adding a piece later is a decision too: ask the user rather than adding it as a side effect of a feature, update the list, and write an ADR when it brings a vendor or a second transport (see "ADRs" in `planning.md`). shadcn/ui needs no ADR: its components are copied into the project and become the project's own code.
 
 ## Configuration
 
@@ -69,8 +70,6 @@ A project not scaffolded with `create-next-app` also needs `eslint`, `eslint-con
 **`next.config.ts`**: add `typedRoutes: true`, and keep the options `create-next-app` generated.
 
 **Storybook**, if chosen: `npm create storybook@latest -- --yes`, then delete the example stories it generates (`src/stories/`), because lint rejects that folder; stories sit next to their components (see `stories.md`).
-
-**shadcn/ui**, if chosen: `npx shadcn@latest init --yes`, then set the `ui` alias in `components.json` to `@/components/primitives`, so `shadcn add` writes there.
 
 ## Point the project's AGENTS.md here
 
@@ -103,8 +102,21 @@ When a change needs a shared piece the project doesn't have yet, build it first,
 | `registerOTel()`, spans in `observe()`, trace IDs in logs, query events in the Drizzle client | `instrumentation.ts`, `server/observability.ts`, `lib/logger/`, `db/client.ts` | With tracing: `observe()` is built, or tracing is added to a project that has it | `observability.md` ("Adding tracing") |
 | `defineEvent`, event buffer, memory sink, `events` in `AppContext`, event release in `observe()` | `lib/analytics/`, `lib/app-context.ts`, `server/context.ts`, `server/observability.ts` | With analytics: the first business event worth tracking | `observability.md` ("Adding analytics", "Event catalog") |
 | A sink per provider | `lib/analytics/sinks/` | With an analytics provider: once events exist | `observability.md` ("Analytics providers") |
+| shadcn/ui: `components.json`, theme variables in `app/globals.css`, its dependencies | `components.json`, `app/globals.css`, `components/primitives/` | With shadcn/ui: the first primitive taken from it, whether it was chosen at setup or added later | "Adding shadcn/ui" below, `ui-and-routing.md` |
 
 The first module is built layer by layer in the same way (see "Adding a new module" in `structure.md`).
+
+### Adding shadcn/ui
+
+Set it up in the change that needs its first primitive, in a new project or one that has run for months on its own primitives:
+
+1. It needs Tailwind CSS, which `create-next-app` sets up by default. In a project without Tailwind, adding it is a decision of its own: ask first.
+2. Run `npx shadcn@latest init --defaults --yes`. It writes `components.json`, adds theme variables to `app/globals.css` and installs its dependencies. Write no `components.json` beforehand: `init` then stops to ask whether to overwrite it.
+3. Point its aliases in `components.json` into the layers, because its defaults (`@/components/ui`, `@/hooks`, `@/components`) are folders lint rejects: `ui` and `hooks` to `@/components/primitives` (its hooks only serve its primitives), `components` to `@/components/patterns` (its blocks are domain-agnostic composites). Keep `utils` and `lib`.
+4. Move what `init` generated into `components/ui/` to `components/primitives/`, delete `components/ui/`, and keep only what the change uses (`init` adds a button whether it's needed or not). If it generated a `lib/utils.ts` that only re-exports `cn`, delete it: lint rejects re-exports, and the primitives import `cn` themselves. If the file defines `cn`, keep it.
+5. Add components with `npx shadcn@latest add <component> --yes`; they now land in `components/primitives/` and import each other from there. Don't pass `--overwrite` where the project has its own primitive of the same name; replacing one is a change of its own.
+6. Generated files pass lint like any other code: fix what lint reports instead of ignoring the folder (shadcn's `use-mobile` hook, for example, sets state in an effect; read it with `useSyncExternalStore` instead).
+7. Set "shadcn/ui: yes" in the "Setup" list.
 
 ## Dependencies
 
