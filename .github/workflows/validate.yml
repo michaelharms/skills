@@ -1,0 +1,24 @@
+name: Validate skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check skills (frontmatter, references, marketplace entries)
+        run: node scripts/check-skills.mjs
+
+      - name: Validate Claude Code marketplace
+        run: npx -y @anthropic-ai/claude-code plugin validate .
+
+      - name: List skills as the skills installer sees them
+        run: npx -y skills add . --list

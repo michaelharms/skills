@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "michaelharms",
+  "description": "Michael Harms' agent skills",
+  "owner": {
+    "name": "Michael Harms",
+    "url": "https://github.com/michaelharms"
+  },
+  "plugins": [
+    {
+      "name": "nextjs-fullstack-architecture",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/nextjs-fullstack-architecture"],
+      "description": "Architecture rules for full-stack Next.js + TypeScript apps: structure, layers, domain modeling, error handling, observability, testing, lint boundaries, tickets and ADRs.",
+      "category": "development",
+      "tags": ["nextjs", "typescript", "architecture", "trpc", "drizzle", "code-review", "planning"],
+      "homepage": "https://github.com/michaelharms/skills/tree/main/skills/nextjs-fullstack-architecture",
+      "repository": "https://github.com/michaelharms/skills",
+      "license": "MIT"
+    },
+    {
+      "name": "epic-react-practices",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/epic-react-practices"],
+      "description": "React guidelines in the style of Epic React: state placement, effects, composition, advanced component patterns, forms, Suspense, error boundaries, performance, accessibility and Testing Library.",
+      "category": "development",
+      "tags": ["react", "typescript", "components", "hooks", "testing", "performance"],
+      "homepage": "https://github.com/michaelharms/skills/tree/main/skills/epic-react-practices",
+      "repository": "https://github.com/michaelharms/skills",
+      "license": "MIT"
+    }
+  ]
+}
