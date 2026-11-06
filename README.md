@@ -7,7 +7,7 @@ Agent skills I use across projects. Each skill is a folder with a `SKILL.md` tha
 | Skill | What it does |
 |---|---|
 | [`nextjs-fullstack-architecture`](skills/nextjs-fullstack-architecture/README.md) | Architecture rules for full-stack Next.js + TypeScript apps (App Router, Drizzle, Zod, Vercel, with tRPC and/or next-safe-action): where files go, layers, domain modeling, error handling, logging with optional tracing and analytics, test and story placement, lint-enforced boundaries, tickets and ADRs. Sets up a project with one prompt, and existing projects adopt it incrementally. [Setup and docs](skills/nextjs-fullstack-architecture/README.md). |
-| [`epic-react-practices`](skills/epic-react-practices/README.md) | React guidelines in the style Kent C. Dodds teaches in Epic React (an unofficial distillation): where state lives, deriving instead of syncing, disciplined effects, composition over prop drilling, advanced component patterns, forms and actions, Suspense, error boundaries, measured performance work, accessibility and Testing Library. Framework-agnostic, no setup. [Docs](skills/epic-react-practices/README.md). |
+| [`epic-react-practices`](skills/epic-react-practices/README.md) | React guidelines in the style Kent C. Dodds teaches in Epic React (an unofficial distillation): where state lives, deriving instead of syncing, disciplined effects, composition over prop drilling, advanced component patterns, forms and actions, Suspense, error boundaries, measured performance work, accessibility and Testing Library. Framework-agnostic; setup adds a pointer to the project's `AGENTS.md`. [Setup and docs](skills/epic-react-practices/README.md). |
 
 ## Install
 
@@ -91,7 +91,7 @@ Deviations a project recorded in its `AGENTS.md` still win over the skill, so an
 
 ## Set up a skill in a project
 
-Skills load on their own when a task matches their description. What a skill needs beyond that is in its README: [`nextjs-fullstack-architecture`](skills/nextjs-fullstack-architecture/README.md) sets up a project with one prompt and is adopted incrementally in existing ones, and [`epic-react-practices`](skills/epic-react-practices/README.md) needs no setup.
+Skills load on their own when a task matches their description. What a skill needs beyond that is in its README: [`nextjs-fullstack-architecture`](skills/nextjs-fullstack-architecture/README.md) sets up a project with one prompt and is adopted incrementally in existing ones, and [`epic-react-practices`](skills/epic-react-practices/README.md) adds a short section to the project's `AGENTS.md` that points agents at it and records the project's deviations.
 
 ## How the skills are organized
 

@@ -1,6 +1,6 @@
 ---
 name: epic-react-practices
-description: React coding guidelines in the style Kent C. Dodds teaches in Epic React - where state should live, deriving instead of syncing state, disciplined effects, composition over prop drilling, the advanced component patterns (compound components, slots, prop getters, state reducer, control props), forms and actions, Suspense and transitions, error boundaries, measured performance work, accessibility, and Testing Library practices. Use this skill whenever writing, refactoring or reviewing React components or hooks (.jsx/.tsx), building a form, designing a reusable component or hook API, deciding where state or data fetching belongs, chasing re-renders or slow renders, or writing tests for React code - even if the user never mentions Kent C. Dodds or Epic React.
+description: React coding guidelines in the style Kent C. Dodds teaches in Epic React - where state should live, deriving instead of syncing state, disciplined effects, composition over prop drilling, the advanced component patterns (compound components, slots, prop getters, state reducer, control props), forms and actions, Suspense and transitions, error boundaries, measured performance work, accessibility, and Testing Library practices. Use this skill whenever writing, refactoring or reviewing React components or hooks (.jsx/.tsx), building a form, designing a reusable component or hook API, deciding where state or data fetching belongs, chasing re-renders or slow renders, writing tests for React code, or setting the skill up in a project - even if the user never mentions Kent C. Dodds or Epic React.
 license: MIT
 ---
 
@@ -8,7 +8,7 @@ license: MIT
 
 Guidelines for writing React the way Kent C. Dodds teaches it in Epic React, his blog and his testing material. This is an unofficial distillation, not something published by Kent or Epic Web. It is framework-agnostic: it applies to Vite SPAs, Next.js, React Router / Remix, or anything else that renders React.
 
-**The project wins over this skill.** Before applying anything here, look at how the codebase already does things (data library, router, styling, test setup, lint rules). If the project has a deliberate convention, follow it and only raise a concern if it causes a real bug. These guidelines are for filling gaps and making judgment calls, not for rewriting working code to match a style.
+**The project wins over this skill.** Before applying anything here, look at how the codebase already does things (data library, router, styling, test setup, lint rules). If the project has a deliberate convention, follow it and only raise a concern if it causes a real bug. Deviations listed in the project's `AGENTS.md` or `CLAUDE.md` are deliberate: follow them and don't "fix" them. These guidelines are for filling gaps and making judgment calls, not for rewriting working code to match a style.
 
 This file holds the mindset and the rules that apply to almost every component. The details, code and less common cases live in reference files: open only the ones the task needs (see "Read only what the task needs").
 
@@ -51,6 +51,7 @@ These ideas sit underneath every rule. When a situation isn't covered, reason fr
 | Making something faster | `references/performance.md` |
 | Writing or reviewing tests | `references/testing.md` |
 | Reviewing or refactoring React code | `references/review-checklist.md` (it links to the rest) |
+| Setting this skill up in a project | "Setting up a project" below |
 
 The larger references start with a table of contents; read the sections you need.
 
@@ -68,3 +69,12 @@ The larger references start with a table of contents; read the sections you need
 **When refactoring or reviewing**, follow `references/review-checklist.md`: report findings in order of impact, say what to change and why, and leave code that's fine alone.
 
 **When asked to make something faster**, ask for or gather a measurement first, then follow `references/performance.md` in order.
+
+## Setting up a project
+
+When asked to set up this skill in a project, point the project's agents here:
+
+1. Use whichever of `AGENTS.md` / `CLAUDE.md` the project already has. Never create both; if it has neither, create `AGENTS.md`.
+2. If the file already has the section, leave it alone. Otherwise add the section from `assets/agents-md-snippet.md` after any other tools' sections (such as the `nextjs-fullstack-architecture` "Architecture" section). Keep it short: this file loads into every agent's context.
+3. In an existing codebase, look for deliberate conventions that contradict this skill and list them in the report as candidate deviations. Record only the ones the user confirms, each with why (or a link to its ADR).
+4. Report what was added, and leave the change uncommitted for the user to review, unless asked to commit.

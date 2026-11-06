@@ -23,15 +23,15 @@ Updating, team-wide installs and manual installs are covered in the [repository 
 
 ## Setup
 
-None. The skill loads on its own when the agent writes, refactors, reviews or tests React components or hooks, or works on forms, state, data loading or performance.
+The skill loads on its own when the agent writes, refactors, reviews or tests React components or hooks, or works on forms, state, data loading or performance. To make sure every agent in a project uses it, ask your agent:
 
-The project's conventions win over the skill. The agent looks at how the codebase already does things (data library, router, styling, test setup, lint rules) and follows them; the skill fills gaps and guides judgement calls instead of rewriting working code to match a style.
+> Set up epic-react-practices in this project.
 
-To make sure every agent in a project uses it, add a line to the project's `AGENTS.md` or `CLAUDE.md`:
+The agent adds a short "React practices" section to the project's `AGENTS.md` (or `CLAUDE.md`, if that's the one the project uses; it creates `AGENTS.md` if there's neither). The section tells every agent to load the skill for React work, and holds a "Deviations" list. In an existing codebase, the agent proposes conventions that contradict the skill as deviations and records only the ones you confirm. Setup changes nothing else, and leaves the change uncommitted for you to review.
 
-```md
-Use the `epic-react-practices` skill when writing, reviewing or testing React code.
-```
+To do it by hand, add [`assets/agents-md-snippet.md`](assets/agents-md-snippet.md) to the project's `AGENTS.md` or `CLAUDE.md`.
+
+The project's conventions win over the skill. The agent looks at how the codebase already does things (data library, router, styling, test setup, lint rules) and follows them; the skill fills gaps and guides judgement calls instead of rewriting working code to match a style. Anything listed under "Deviations" overrides the skill, so record each one with why, or a link to the ADR that explains it.
 
 ## What it covers
 
@@ -51,10 +51,12 @@ Use the `epic-react-practices` skill when writing, reviewing or testing React co
 
 ## What's inside
 
-`SKILL.md` is what the agent loads: the mindset, ten rules for every component, and which reference to read for which task. References load only when a task needs them.
+`SKILL.md` is what the agent loads: the mindset, ten rules for every component, which reference to read for which task, and the setup steps. References load only when a task needs them; `assets/` holds the section a project adds to its `AGENTS.md`.
 
 ```
 epic-react-practices/
+  assets/
+    agents-md-snippet.md
   references/
     patterns/
       compound-components.md
