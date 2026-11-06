@@ -2,7 +2,7 @@
 
 Read this when adding a tRPC procedure, a server action or a route handler, or when touching auth or the request context.
 
-Each project decides whether it uses tRPC, server actions (with `next-safe-action`), or both; the choice is recorded in the "Setup" list of the project's `AGENTS.md`. Use the transport the project has. Don't add the other one as part of a feature: adding a transport is a decision of its own (see "Choosing the transport").
+Each project decides whether it uses tRPC, server actions (with `next-safe-action`), or both; the choice is recorded in the "Setup" list of the project's `AGENTS.md`. Use the transport the project has. Don't add the other one as part of a feature: adding a transport is a decision of its own (see "Choosing the transport"). If the "Setup" list says the transport is undecided, ask the user before writing the first procedure or action, and record the answer there.
 
 ## Contents
 
@@ -35,7 +35,7 @@ server/
   rsc-errors.ts        handleRscError(): maps errors in server components to notFound()/redirect()
 ```
 
-If the project doesn't have the files a change needs yet, build them first (see "Build the shared infrastructure" in `setup.md`). Build only those: a project without route handlers has no `route-handler.ts`.
+If the project doesn't have the files a change needs yet, build them first (see "Building shared pieces on first use" in `setup.md`). Build only those: a project without route handlers has no `route-handler.ts`.
 
 ## Choosing the transport
 

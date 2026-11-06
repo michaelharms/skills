@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Checks every skill in skills/ and the Claude Code marketplace manifest.
+// Checks every skill in skills/ (frontmatter, README, references, file trees) and the Claude Code marketplace manifest.
 // Usage: node scripts/check-skills.mjs
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
@@ -28,6 +28,8 @@ for (const name of readdirSync(join(root, "skills"))) {
     fail(`${name}: missing SKILL.md`);
     continue;
   }
+  // The README is the skill's page on GitHub (its marketplace homepage): what it does, install and setup.
+  if (!existsSync(join(dir, "README.md"))) fail(`${name}: missing README.md`);
   const text = readFileSync(skillFile, "utf8");
   const frontmatter = text.match(/^---\n([\s\S]*?)\n---\n/)?.[1] ?? "";
   const field = (key) => frontmatter.match(new RegExp(`^${key}:\\s*(.*)$`, "m"))?.[1]?.trim() ?? "";

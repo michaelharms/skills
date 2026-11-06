@@ -2,7 +2,7 @@
 
 Read this when adding logs or analytics events, touching tracing, or debugging a production issue.
 
-Logging is part of every project. Tracing and analytics are optional: a project sets them up when it needs them, not up front. Check the project's `AGENTS.md` (its "Setup" list) or `package.json` to see which it has, and never emit events or create spans in a project that hasn't set them up.
+Logging is part of every project. Tracing and analytics are optional: a project sets them up when it needs them, not up front. Check the project's `AGENTS.md` (its "Setup" list) or `package.json` to see which it uses, and never emit events or create spans in a project that doesn't use them.
 
 ## Contents
 

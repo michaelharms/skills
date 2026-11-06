@@ -2,12 +2,12 @@
 
 [![skills.sh](https://skills.sh/b/michaelharms/skills)](https://skills.sh/michaelharms/skills)
 
-Agent skills I use across projects. Each skill is a folder with a `SKILL.md` that agents load when a task matches, plus reference files they open only when needed.
+Agent skills I use across projects. Each skill is a folder with a `SKILL.md` that agents load when a task matches, reference files they open only when needed, and a `README.md` for humans with the skill's setup and docs.
 
 | Skill | What it does |
 |---|---|
-| [`nextjs-fullstack-architecture`](skills/nextjs-fullstack-architecture/SKILL.md) | Architecture rules for full-stack Next.js + TypeScript apps (App Router, Drizzle, Zod, Vercel, with tRPC and/or next-safe-action): where files go, layers, domain modeling, error handling, logging with optional tracing and analytics, test and story placement, lint-enforced boundaries, tickets and ADRs. Projects set up only the pieces they need. Includes an ESLint config that enforces the boundaries, and templates for specs, tickets, ADRs and `CODING_STANDARDS.md`. |
-| [`epic-react-practices`](skills/epic-react-practices/SKILL.md) | React guidelines in the style Kent C. Dodds teaches in Epic React (an unofficial distillation): where state lives, deriving instead of syncing, disciplined effects, composition over prop drilling, advanced component patterns, forms and actions, Suspense, error boundaries, measured performance work, accessibility and Testing Library. Framework-agnostic. |
+| [`nextjs-fullstack-architecture`](skills/nextjs-fullstack-architecture/README.md) | Architecture rules for full-stack Next.js + TypeScript apps (App Router, Drizzle, Zod, Vercel, with tRPC and/or next-safe-action): where files go, layers, domain modeling, error handling, logging with optional tracing and analytics, test and story placement, lint-enforced boundaries, tickets and ADRs. Sets up a project with one prompt, and existing projects adopt it incrementally. [Setup and docs](skills/nextjs-fullstack-architecture/README.md). |
+| [`epic-react-practices`](skills/epic-react-practices/README.md) | React guidelines in the style Kent C. Dodds teaches in Epic React (an unofficial distillation): where state lives, deriving instead of syncing, disciplined effects, composition over prop drilling, advanced component patterns, forms and actions, Suspense, error boundaries, measured performance work, accessibility and Testing Library. Framework-agnostic, no setup. [Docs](skills/epic-react-practices/README.md). |
 
 ## Install
 
@@ -87,21 +87,11 @@ Copy the skill folder again. Delete the old one first, so files that were remove
 
 ### After updating
 
-Deviations a project recorded in its `AGENTS.md` still win over the skill, so an update never overrides a project's decisions. Files a project copied from `assets/` (the ESLint config, `CODING_STANDARDS.md`, the adoption ADR) are the project's own copies and aren't updated; compare them with the new versions when an update changes them.
+Deviations a project recorded in its `AGENTS.md` still win over the skill, so an update never overrides a project's decisions. Files a project copied from a skill (such as the architecture skill's ESLint config) are the project's own copies and aren't updated; each skill's README says which ones to compare after an update.
 
-## Use a skill from a project's AGENTS.md
+## Set up a skill in a project
 
-Skills load on their own when a task matches their description. To make sure every agent working in a project uses the right one, and to record project-specific deviations, add a section to the project's `AGENTS.md`. For the architecture skill:
-
-1. Copy [`assets/agents-md-snippet.md`](skills/nextjs-fullstack-architecture/assets/agents-md-snippet.md) into the project's `CLAUDE.md` or `AGENTS.md` (whichever exists). It's a few navigation pointers plus the project's list of deviations.
-2. Copy [`assets/templates/adr-adopt-architecture.md`](skills/nextjs-fullstack-architecture/assets/templates/adr-adopt-architecture.md) to `docs/adr/0001-follow-nextjs-fullstack-architecture.md`, so tools that read ADRs see the architecture's constraints even when the skill isn't loaded.
-3. Copy [`assets/templates/coding-standards.md`](skills/nextjs-fullstack-architecture/assets/templates/coding-standards.md) to `CODING_STANDARDS.md`, so review tools that read standards files apply the judgement calls lint can't enforce.
-
-The full setup is in [`references/setup.md`](skills/nextjs-fullstack-architecture/references/setup.md).
-
-## Works with other skills and tools
-
-`nextjs-fullstack-architecture` defines what a spec, ticket or ADR must settle for the architecture (rules, failures, permissions, events, data changes, test seams), not which tool writes it, so it works with any planning, implementation or review skill. Other tools see the architecture through the files most of them read: the project's `AGENTS.md`/`CLAUDE.md`, `GLOSSARY.md`, ADRs in `docs/adr/` and `CODING_STANDARDS.md`. Without a planning tool, it brings its own spec, ticket and ADR templates. See [`references/planning.md`](skills/nextjs-fullstack-architecture/references/planning.md).
+Skills load on their own when a task matches their description. What a skill needs beyond that is in its README: [`nextjs-fullstack-architecture`](skills/nextjs-fullstack-architecture/README.md) sets up a project with one prompt and is adopted incrementally in existing ones, and [`epic-react-practices`](skills/epic-react-practices/README.md) needs no setup.
 
 ## How the skills are organized
 
@@ -111,6 +101,7 @@ Skills use progressive disclosure, so an agent only reads what the task needs:
 2. **`SKILL.md`** loads when the skill triggers. It holds the map, the rules that apply to every change, and a table that routes each kind of task to its reference files.
 3. **`references/*.md`** load only when the task needs them: writing domain code reads `domain.md`, reviewing a PR reads `review-checklist.md`, writing a spec, issue or ADR reads `planning.md`.
 4. **`assets/`** holds files to copy into projects (configs, templates); they're never read into context unless needed.
+5. **`README.md`** is for humans: what the skill does, how to install and set it up, and what's in the folder. GitHub shows it on the skill's folder, which is the plugin's homepage. Agents don't load it.
 
 ```
 .claude-plugin/
@@ -119,11 +110,12 @@ Skills use progressive disclosure, so an agent only reads what the task needs:
   workflows/
     validate.yml                    Runs the checks and both installers' validation on every push
 scripts/
-  check-skills.mjs                  Checks frontmatter, references, marketplace entries and file-tree order
+  check-skills.mjs                  Checks frontmatter, READMEs, references, marketplace entries and file-tree order
 skills/
   <skill-name>/
     assets/
     references/
+    README.md
     SKILL.md
 LICENSE
 README.md
@@ -133,8 +125,9 @@ README.md
 
 1. Create `skills/<skill-name>/SKILL.md` with `name` (equal to the folder name) and `description` frontmatter. The description decides when agents load the skill: say what it does and list the situations it's for.
 2. Keep `SKILL.md` short; put details in `references/` and link each reference from `SKILL.md` with when to read it.
-3. Add a plugin entry to `.claude-plugin/marketplace.json`, with `"source": "./"`, `"strict": false` and `"skills": ["./skills/<skill-name>"]`, so each skill installs on its own.
-4. Run the checks:
+3. Write `skills/<skill-name>/README.md` for humans: what the skill does, how to install it on its own, how to set it up in a project (or that it needs no setup), and what's in the folder. Keep it out of `SKILL.md`, which every agent that loads the skill reads. skills.sh shows `SKILL.md`, not the README.
+4. Add a plugin entry to `.claude-plugin/marketplace.json`, with `"source": "./"`, `"strict": false` and `"skills": ["./skills/<skill-name>"]`, so each skill installs on its own.
+5. Run the checks:
 
    ```bash
    node scripts/check-skills.mjs

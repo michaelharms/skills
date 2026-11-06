@@ -8,11 +8,11 @@ This project follows the `nextjs-fullstack-architecture` skill (https://github.c
 
 ### Setup
 
-What this project has set up. Use only these; adding another piece (or a second transport) is a decision, recorded here and, when it brings a vendor, in an ADR. Create files only when they get content: no empty placeholders.
+What this project uses. Use only these; adding another piece (or a second transport) is a decision, recorded here and, when it brings a vendor, in an ADR. A piece listed here is built by the first change that needs it, so check the code for what exists already. Create files only when they get content: no empty placeholders.
 
-- Transport: <tRPC | server actions | both>
-- Tracing: <not set up | OpenTelemetry via @vercel/otel>
-- Analytics: <not set up | set up without a provider | set up, provider: …>
+- Transport: <tRPC | server actions | both | undecided: ask the user before the first procedure or action>
+- Tracing: <no | OpenTelemetry via @vercel/otel>
+- Analytics: <no | yes, without a provider | yes, provider: …>
 - Logging: <console sink | pino | …>
 - Storybook: <no | yes>
 - shadcn/ui: <no | yes>

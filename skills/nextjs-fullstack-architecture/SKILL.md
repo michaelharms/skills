@@ -8,7 +8,7 @@ license: MIT
 
 This skill holds the architecture rules for full-stack Next.js projects. The rules are split into reference files so that you load only what the current task needs: this file is the map, and the table under "Read only what the task needs" tells you which references to open.
 
-**Project rules win.** If the project's `AGENTS.md` or `CLAUDE.md` lists deviations from this skill, follow the deviation and don't "fix" it. When a deviation contradicts something here, mention it once if it matters for the task, then go with the project.
+**Project rules win.** If the project's `AGENTS.md` or `CLAUDE.md` lists deviations from this skill, follow the deviation and don't "fix" it. When a deviation contradicts something here, mention it once if it matters for the task, then go with the project. In a project that is still migrating, follow this skill in new and migrated code, and migrate legacy code only when the task changes it.
 
 Examples throughout use a `tasks` module (a to-do app). They illustrate the patterns; the project's own modules replace them.
 
@@ -48,7 +48,7 @@ server (tRPC, actions) → use-cases → domain ← persistence → db
 These hold no matter which part of the code you touch. Each exists so that code stays easy to find, change and reuse; the references explain the details.
 
 1. **Put files where `references/structure.md` says.** Don't invent folders: lint fails on files outside the known layers, and an unknown location is a decision for an ADR, not for a single change. Layer folders are flat and there are no barrels, so imports name the file directly: `@/modules/tasks/components/task-card`.
-2. **Build only what's needed now.** Create a file or folder with its first real content, never as an empty placeholder: a module gets `urls.ts` with its first page, `errors.ts` with its first error. Use only the optional pieces the project has set up (its transport, tracing, analytics, Storybook; see the "Setup" list in its `AGENTS.md`, or `package.json`), and don't add one as a side effect of a feature.
+2. **Build only what's needed now.** Create a file or folder with its first real content, never as an empty placeholder: a module gets `urls.ts` with its first page, `errors.ts` with its first error. Use only the optional pieces the project uses (its transport, tracing, analytics, Storybook; see the "Setup" list in its `AGENTS.md`, or `package.json` without one), and don't add one as a side effect of a feature.
 3. **Business rules live in `domain/`**, as pure functions over readonly data. Keeping them free of I/O and frameworks makes them testable without mocks and reusable on the client.
 4. **Use-cases get everything through `ctx`** (db, user, clock, logger, and events with analytics) and never call `headers()`, `cookies()`, `auth()` or `new Date()`. That's what lets the same use-case run from tRPC, a server action, a cron job or a test.
 5. **Only `persistence/` and `db/` touch Drizzle.** Storage is an infrastructure detail; the domain model doesn't change when tables do.
@@ -79,7 +79,8 @@ Open the references for the task at hand, not all of them. Longer references sta
 | Reviewing code, a diff or a pull request, or updating `CODING_STANDARDS.md` | `references/review-checklist.md` (it links to the rest) |
 | Interviewing about a feature, or writing or reviewing a spec or PRD, ticket, user story, implementation plan or ADR, with any tool or by hand | `references/planning.md` |
 | Explaining or questioning why the architecture is this way | `references/decisions.md` |
-| Setting this up in a new project, adopting it in an existing one, adding an optional piece (tRPC, server actions, tracing, analytics, Storybook), or building the shared infrastructure | `references/setup.md` |
+| Setting this up in a new project or adopting it in an existing one | "Setup workflow" in `references/setup.md` |
+| Adding an optional piece (tRPC, server actions, tracing, analytics, Storybook), or needing a shared piece (errors, logger, context, Drizzle client, transport) that doesn't exist yet | "Building shared pieces on first use" in `references/setup.md` |
 
 A complete feature (for example "users can archive tasks") usually touches, in this order: domain → contracts and errors → use-cases and persistence → delivery → UI. Read the references as you reach each layer rather than all at once.
 
@@ -87,7 +88,7 @@ A complete feature (for example "users can archive tasks") usually touches, in t
 
 1. Work out which layers the change touches, using the map above.
 2. Read the references for those layers.
-3. Build from the inside out: domain first, then errors, events (with analytics) and schemas, then persistence and the use-case, then the procedure or action, then the UI. Create only the files the change fills. Put any tests next to the files they cover.
+3. Build from the inside out: domain first, then errors, events (with analytics) and schemas, then persistence and the use-case, then the procedure or action, then the UI. Create only the files the change fills. If the change needs a shared piece that doesn't exist yet, build it first, following "Building shared pieces on first use" in `references/setup.md`. Put any tests next to the files they cover.
 4. Run the project's lint, type check and tests. Treat boundary errors as design feedback.
 5. Before finishing, check the touched layers against `references/review-checklist.md`.
 

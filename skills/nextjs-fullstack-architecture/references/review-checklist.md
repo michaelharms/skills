@@ -32,7 +32,7 @@ The project's `CODING_STANDARDS.md` (from `assets/templates/coding-standards.md`
 
 - [ ] Files are where `structure.md` puts them; no new folders, no barrel files, kebab-case names.
 - [ ] No empty or placeholder files and folders; every new file has real content, and files left empty by the change are deleted.
-- [ ] Only infrastructure the project has set up is used (its transport, tracing, analytics, Storybook); adding a new piece is called out as a decision, not slipped into a feature.
+- [ ] Only infrastructure in the project's "Setup" list is used (its transport, tracing, analytics, Storybook); adding a new piece is called out as a decision, not slipped into a feature.
 - [ ] Names of modules, entities, transitions, events and error codes use the domain glossary's terms (`GLOSSARY.md`), not its "avoid" aliases.
 - [ ] The change does what its issue or spec settled (rules, failures, events); differences are either explained or fed back into the issue.
 - [ ] No disabled lint rules (`eslint-disable`) and no widened boundary config.

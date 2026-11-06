@@ -1,10 +1,10 @@
-// Architecture boundaries for the project structure described in AGENTS.md.
+// Architecture boundaries for the project structure of the nextjs-fullstack-architecture skill
+// (https://github.com/michaelharms/skills/tree/main/skills/nextjs-fullstack-architecture).
 //
-// Usage in eslint.config.mjs (after your Next/TypeScript config, which provides the TS parser):
+// Usage: import it in eslint.config.mjs and spread it after the Next/TypeScript config, which provides the TS parser:
 //
-//   import { defineConfig } from "eslint/config";
 //   import boundariesConfig from "./eslint.boundaries.mjs";
-//   export default defineConfig([...nextConfig, ...boundariesConfig]);
+//   export default defineConfig([...nextVitals, ...nextTs, ...boundariesConfig, globalIgnores([...])]);
 //
 // Requires: eslint-plugin-boundaries@^7, eslint-import-resolver-typescript (resolves the "@/*" alias).
 
@@ -91,7 +91,7 @@ const NO_BARRELS = [
   },
 ];
 
-export default [
+const boundariesConfig = [
   {
     files: ["src/**/*.{ts,tsx}"],
     plugins: { boundaries },
@@ -125,7 +125,7 @@ export default [
       ],
     },
     rules: {
-      // Files must live in a known place: no new top-level folders without updating AGENTS.md and this config.
+      // Files must live in a known place: no new top-level folders without an ADR and an update to this config.
       "boundaries/no-unknown-files": "error",
       "boundaries/no-unknown-dependencies": "error",
       "boundaries/dependencies": [
@@ -133,7 +133,7 @@ export default [
         {
           default: "disallow",
           message:
-            "{{ from.element.types.[0] }} may not import {{ to.element.types.[0] }} ({{ dependency.source }}). See 'Import rules' in AGENTS.md.",
+            "{{ from.element.types.[0] }} may not import {{ to.element.types.[0] }} ({{ dependency.source }}). See references/import-rules.md in the nextjs-fullstack-architecture skill.",
           policies: [
             allow("app", to("app", "screen", "shell", "primitive", "pattern", "module", "module-ui", "module-hooks", "server", "lib")),
             allow("screen", to("screen", "shell", "primitive", "pattern", "module", "module-ui", "module-hooks", "module-utils", "domain", "use-case", "server", "lib")),
@@ -250,3 +250,5 @@ export default [
     },
   },
 ];
+
+export default boundariesConfig;
